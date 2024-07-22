@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/css/modaal.min.css">
+<!-- CDN modal-video CSS --> 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/modal-video@2.4.8/css/modal-video.min.css" /> 
+<!-- jQuery -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script> 
+<!-- CDN modal-video jQuery --> 
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/modal-video@2.4.8/js/jquery-modal-video.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>Jyanken-Rich</title>
+</head>
+<body>
+
+<header>
+  <div class="header">
+    <div class="header-logo">
+      <a href="#"><img class="header-logo-img" src="./img/Jyanken-Rich-Logo.png" alt=""></a>
+    </div>
+    <div class="header-nav">
+      <ul class="nav-menu-list">
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Home</a>
+        </li>
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Strength</a>
+        </li>
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Service</a>
+        </li>
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Case</a>
+        </li>
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Company</a>
+        </li> 
+        <li class="nav-menu-item">
+          <a class="nav-menu-label" href="#">Recruit</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="main-visual">
+    <div class="main-visual">
+      <h1>Game</h1>
+    </div>
+    <div class="main-visual-text">
+    </div>
+  </section>
+
+ 
+</main>
+
+
+<footer></footer>
+
+<script>
+//じゃんけん用のSCRIPTを書いてください
+// グローバル変数
+let game_cnt = 0; // 試合数
+let result_ary =[0, 0, 0]; // 結果配列：[引き分け, 勝ち, 負け]
+let pc_hands_ary = [0, 0, 0]; // サザエさんの出し手配列：[グー, チョキ, パー]
+let rate = 0; // 勝率格納用の変数
+// モーダルの定義
+const modal = document.getElementById('easyModal');
+const buttonClose = document.getElementsByClassName('modalClose')[0];
+// バツ印がクリックされた時
+buttonClose.addEventListener('click', modalClose);
+function modalClose() {
+  modal.style.display = 'none';
+}
+// モーダルコンテンツ以外がクリックされた時
+addEventListener('click', outsideClose);
+function outsideClose(e) {
+  if (e.target == modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// グラフの描画（出し手）（初期）
+let ctx = document.getElementById("bar_plt_dashite");
+let bar_config = {
+  // 作成したいチャートタイプ：棒グラフ
+  type: 'bar',
+  // データセットのデータ
+  data: {
+    labels: ["グー", "チョキ", "パー"],
+    datasets: [{
+      label: ["グー", "チョキ", "パー"],
+      data: pc_hands_ary,
+      backgroundColor: [ // それぞれの棒の色を設定
+        '#c8d166',
+        '#ff5f57',
+        '#a9d9ea',
+      ],
+    }]
+  },
+  // 設定オプション
+  options: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: '出し手'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          suggestedMax: 30,
+          suggestedMin: 0,
+          stepSize: 5,
+          callback: function(value, index, values){
+            return value + "回"
+          }
+        }
+      }]
+    }
+  }
+};
+let bar_chart = new Chart(ctx, bar_config);
+
+// グラフの描画（結果）（初期）
+let ctx_result = document.getElementById("bar_plt_result");
+let bar_config_result = {
+  // 作成したいチャートタイプ：棒グラフ
+  type: 'bar',
+  // データセットのデータ
+  data: {
+    labels: ["引き分け", "勝ち", "負け"],
+    datasets: [{
+      data: result_ary,
+      backgroundColor:[ // それぞれの棒の色を設定
+        '#e1c62d',
+        '#da2b2b',
+        '#3b3b3b',
+      ],
+    }]
+  },
+  // 設定オプション
+  options: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: '対戦結果'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          suggestedMax: 30,
+          suggestedMin: 0,
+          stepSize: 5,
+          callback: function(value, index, values){
+            return value + "回"
+          }
+        }
+      }]
+    },
+    
+  }
+};
+let bar_chart_result = new Chart(ctx_result, bar_config_result);
+
+
+// グラフエリアの描画
+function draw_chart() {
+  // chartが存在しない場合は描画
+  if(!bar_chart || !bar_chart_result) {
+    bar_chart = new Chart(ctx, bar_config); // 出し手グラフ
+    bar_chart_result = new Chart(ctx_result, bar_config_result); // 結果グラフ
+  }
+  else{ // データセットの更新
+    // 出し手グラフ
+    bar_config.data.datasets = bar_config.data.datasets;
+    bar_chart.update(); // グラフの更新
+
+    // 結果グラフ
+    bar_config_result.data.datasets = bar_config_result.data.datasets;
+    bar_chart_result.update(); // グラフの更新
+  }
+}
+
+// 乱数生成関数 (引数なし、戻り値あり)
+function generate_random() {
+  const pc_hands_num = Math.ceil(Math.random()*3); // 1 ~ 3の乱数生成
+  // pc_hands書き換え
+  if(pc_hands_num == 1) {
+    $("#pc_hands").html("グー");
+    // グーの回数の加算
+    pc_hands_ary[0] = pc_hands_ary[0] + 1; 
+    console.log(pc_hands_ary);
+    
+    // 画像差し替え
+    let target = document.querySelector("#target");
+    target.src = "./img/sazae_gu.jpg";
+  }
+  else if(pc_hands_num == 2) {
+    $("#pc_hands").html("チョキ");
+    // チョキの回数の加算
+    pc_hands_ary[1] = pc_hands_ary[1] + 1; 
+    console.log(pc_hands_ary);
+    
+    // 画像差し替え
+    let target = document.querySelector("#target");
+    target.src = "./img/sazae_cho.jpg";
+  }
+  else {
+    $("#pc_hands").html("パー");
+    // パーの回数の加算
+    pc_hands_ary[2] = pc_hands_ary[2] + 1; 
+    console.log(pc_hands_ary);
+    
+    // 画像差し替え
+    let target = document.querySelector("#target");
+    target.src = "./img/sazae_par.jpg";
+  }
+  return pc_hands_num;
+}
+
+// 勝ち負け判定関数（引数あり、戻り値なし）、グラフ更新関数込み
+function check_hands(my_num, pc_num) {
+  // 引き分けの場合（数が同じ）
+  if(my_num == pc_num) {
+    $("#judgment").html("引き分け");
+    // 引き分け回数の加算
+    result_ary[0] = result_ary[0] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  else if(my_num == 1 && pc_num == 2) { // グーの勝ち
+    $("#judgment").html("勝ち");
+    // 勝ち回数の加算
+    result_ary[1] = result_ary[1] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  else if(my_num == 1 && pc_num == 3) { // グーの負け
+    $("#judgment").html("負け");
+    // 負け回数の加算
+    result_ary[2] = result_ary[2] + 1;
+    console.log(result_ary);
+    draw_chart();
+    modal_open();
+
+  }
+  else if(my_num == 2 && pc_num == 3) { // チョキーの勝ち
+    $("#judgment").html("勝ち");
+    // 勝ち回数の加算
+    result_ary[1] = result_ary[1] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  else if(my_num == 2 && pc_num == 1) { // チョキの負け
+    $("#judgment").html("負け");
+    // 負け回数の加算
+    result_ary[2] = result_ary[2] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  else if(my_num == 3 && pc_num == 1) { // パーの勝ち
+    $("#judgment").html("勝ち");
+    // 勝ち回数の加算
+    result_ary[1] = result_ary[1] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  else if(my_num == 3 && pc_num == 2) { // パーの負け
+    $("#judgment").html("負け");
+    // 負け回数の加算
+    result_ary[2] = result_ary[2] + 1;
+    console.log(result_ary);
+    draw_chart();
+  }
+  
+  return 0;
+}
+
+// 勝率計算関数
+function rate_cal(){
+  // 勝率の計算
+  rate = (result_ary[1] / game_cnt);
+  rate_round = (Math.round(rate*100));
+  document.getElementById('rate').textContent = "勝率：" + rate_round + "%";
+  console.log(rate);
+}
+
+// モーダル表示
+function modal_open() {
+  modal.style.display = 'block';
+  $(".js-modal-video").modalVideo({
+      channel: "youtube",//YouTubeの場合
+      youtube: {
+        rel: 0, //関連動画の指定
+        autoplay: 0, //自動再生の指定
+      },
+    });
+}
+// グーボタンをクリック
+$("#gu_btn").on("click",function() {
+  // 自分の出し手、PCの出し手の生成
+  let my_hands = 1; // グー：1
+  let pc_hands = generate_random();
+  
+  // じゃんけんの勝ち負け判定
+  check_hands(my_hands, pc_hands)
+
+  // 試合数の加算
+  game_cnt = game_cnt + 1;
+  console.log(game_cnt);
+
+  // 勝率計算
+  rate_cal()
+
+});
+
+// チョキボタンをクリック
+$("#cho_btn").on("click",function() {
+  // 自分の出し手、PCの出し手の生成
+  let my_hands = 2; // チョキ：2
+  let pc_hands = generate_random();
+  
+  // じゃんけんの勝ち負け判定
+  check_hands(my_hands, pc_hands)
+  
+  // 試合数の加算
+  game_cnt = game_cnt + 1;
+  console.log(game_cnt);
+
+  // 勝率計算
+  rate_cal()
+});
+
+// パーボタンをクリック
+$("#par_btn").on("click",function() {
+  // 自分の出し手、PCの出し手の生成
+  let my_hands = 3; // チョキ：3
+  let pc_hands = generate_random();
+  
+  // じゃんけんの勝ち負け判定
+  check_hands(my_hands, pc_hands)
+  
+  // 試合数の加算
+  game_cnt = game_cnt + 1;
+  console.log(game_cnt);
+
+  // 勝率計算
+  rate_cal()
+});
+</script>
+</body>
+</html>

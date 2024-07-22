@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif+JP');
+
+body{
+    margin:0;
+    padding:0;
+    text-align:center;
+    font-family: 'Noto Serif JP', sans-serif;
+    letter-spacing: 0.12em;
+}
+/* 共通 */
+section {
+    margin: 100px 0px 0px 0px;
+}
+h1 {
+    color: #545454;
+}
+
+/* header */
+header{
+    text-align: center;
+    list-style-type: none;
+}
+header img {
+    width: calc(150vw / 20);
+    height: auto;
+}
+.header .header-nav .nav-menu-item {
+    margin: auto 2rem;
+}
+.header  {
+    margin: auto 2rem;
+}
+.header li {
+    list-style-type: none;
+    display: inline-block;
+}
+.header a {
+    color: #545454;
+    font-size: calc(30vw / 20);
+    letter-spacing: 0.12em;
+    text-decoration:none;
+}
+/* main-visual */
+.main-visual{
+    width: 100%;
+    height: auto;
+    position: relative;/*親要素にrelative*/
+}
+.main-visual img {
+    width: 100%;
+    height: auto;
+}
+.main-visual-text {
+    position: absolute;/*重ねたい子要素にabsolute*/
+    top:35%;
+    left: 75%;
+   -ms-transform: translate(-50%,-50%);/*ベンダープレフィックス*/
+    -webkit-transform: translate(-50%,-50%);/*ベンダープレフィックス*/
+    transform: translate(-50%,-50%);/*センター寄せの修正*/
+    color: #181728;
+}
+.main-visual-text h1 {
+    font-size: calc(100vw / 20);
+}
+.main-visual-text p {
+    font-size: calc(45vw / 20);
+}
+
+/* 対戦 */
+.jyanken-battle {
+    background-color: rgb(34, 34, 34);
+}
+.jyanken-battle img {
+    width: 80%;
+    height: auto;
+    margin: 20px 20px 20px 20px;
+    text-align: center;
+}
+.button-box {
+    display: flex;              /* フレックスボックスにする */
+    justify-content: center;
+
+}
+
+/* ボタンのスタイル */
+.buttonOutlineGradient {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: 64px;
+    padding: 2px;
+    margin: 10px;
+    font-family: sans-serif;
+    font-size: 16px;
+    text-align: center;
+    overflow-wrap: anywhere;
+    background: linear-gradient(135deg, #6fa24a, #15a1cc);
+    border-radius: 32px; /* (buttonの高さ / 2) の値 */
+}  
+.buttonOutlineGradient::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background: linear-gradient(135deg, #6fa24a, #15a1cc);
+    filter: blur(8px);
+    border-radius: 32px; /* (buttonの高さ / 2) の値 */
+    opacity: 0;
+}
+  
+.buttonOutlineGradient_item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background-color: #222;
+    border-radius: 32px; /* (buttonの高さ / 2) の値 */
+}
+@media (any-hover: hover) {
+    .buttonOutlineGradient::before {
+      transition: opacity 0.2s;
+      will-change: filter;
+    }
+  
+    .buttonOutlineGradient:hover::before {
+      opacity: 1;
+    }
+}
+
+.result-box {
+    margin: 0 auto;
+    width: 560px;
+    height: 315px;
+    background-color: #6fa24a;
+    text-align:  center;        /* 中央寄せ */
+
+
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #f4f4f4;
+    margin: 20% auto;
+    width: 50%;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+    animation-name: modalopen;
+    animation-duration: 1s;
+  }
+  
+  @keyframes modalopen {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
+  
+  .modal-header h1 {
+    margin: 1rem 0;
+  }
+  
+  .modal-header {
+    background: lightblue;
+    padding: 3px 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .modalClose {
+    font-size: 2rem;
+  }
+  
+  .modalClose:hover {
+    cursor: pointer;
+  }
+  
+  .modal-body {
+    padding: 10px 20px;
+    color: black;
+  }
+
+
+
+
+
+footer{
+    background-color: #fff;
+    border-bottom:1px solid #ccc;
+    text-align: center;
+    
+}

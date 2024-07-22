@@ -147,9 +147,9 @@ color: #ffffff;/* フォント色 */
     padding: 10px;
     color: #ffffff;            /* 文字色 */
     font-weight: bold;
-    margin:  10px;              /* 外側の余白 */
+    margin:  5px;              /* 外側の余白 */
     border-radius:  5px;        /* 角丸指定 */
-    width: 15%;                 /* 幅指定 */
+    width: 20%;                 /* 幅指定 */
 }
 .service-box-item p {
     font-size: calc(25vw / 20);/* フォントサイズ */
@@ -157,6 +157,7 @@ color: #ffffff;/* フォント色 */
 }
 .service-box-item img {
     width: 50%;
+    height: auto;
 }
 
 .service-box-item-btn {
@@ -190,7 +191,53 @@ color: #ffffff;/* フォント色 */
     background-color:  #81d0f2; /* 背景色指定 */
 }
 
-
+/* Case */
+.case-box {
+    background-color: #eee;     /* 背景色指定 */
+    padding:  10px;             /* 余白指定 */
+    display: flex;              /* フレックスボックスにする */
+    justify-content: center;
+}
+.case-box-item {
+    padding: 10px;
+    color: #6f7071;            /* 文字色 */
+    background-color: #fff;
+    font-weight: bold;
+    margin:  5px;              /* 外側の余白 */
+    border-radius:  5px;        /* 角丸指定 */
+    width: 20%;                 /* 幅指定 */
+}
+.case-box-item img {
+    width: 100%;
+    height: auto;
+}
+.tag-box {
+    display: flex;              /* フレックスボックスにする */
+    justify-content:center;
+}
+.tag-box-item h6{
+    padding: 5px;
+    margin: 0px 4px 0px 4px;
+    background-color: #03b0f9;
+    color: #fff;
+}
+.case-box-item-btn {
+    display: block;
+	text-align: center;
+	text-decoration: none;
+	width: 70px;
+	margin: auto;
+	padding: 1rem 4rem;
+	font-weight: bold;
+	color: #ffffff;
+    background: #6f7071;
+	border-radius: 100vh;
+	transition: 0.5s;
+}
+.case-box-item-btn:hover {
+	color: #fff;
+	background-color: #03b0f9;
+}
 
 
 
